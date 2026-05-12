@@ -68,4 +68,7 @@ async def post_inference(data: Data):
 	lb=lb
     )
     _inference = inference(model, data_processed)
-    return {"result": apply_label(_inference)}
+
+    prediction = lb.inverse_transform(_inference)[0]
+
+    return {"result": str(prediction)}

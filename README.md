@@ -3,27 +3,71 @@ Working in a command line environment is recommended for ease of use with git an
 # Environment Set up (pip or conda)
 * Option 1: use the supplied file `environment.yml` to create a new environment with conda
 * Option 2: use the supplied file `requirements.txt` to create a new environment with pip
+
+This project was completed using option 1, using the 'environment.yml' file with Conda.
+
+To create the environment:
+
+''' bash
+conda env create -f environment.yml
+conda activate fastapi
+'''
     
-## Repositories
-* Create a directory for the project and initialize git.
-    * As you work on the code, continually commit changes. Trained models you want to use in production must be committed to GitHub.
-* Connect your local git repo to GitHub.
-* Setup GitHub Actions on your repo. You can use one of the pre-made GitHub Actions if at a minimum it runs pytest and flake8 on push and requires both to pass without error.
-    * Make sure you set up the GitHub Action to have the same version of Python as you used in development.
+------------
+
+# Repositories
+
+I created a local git repository and connected it to GitHub. GitHub Actions was confirgured for CI/CD.
+
+This GitHub Actions workflow:
+- runs pytest
+- runs flake8
+- then automatically runs on pushes to main
+- requires tests to pass successfully
+
+-----------
 
 # Data
-* Download census.csv and commit it to dvc.
-* This data is messy, try to open it in pandas and see what you get.
-* To clean it, use your favorite text editor to remove all spaces.
+
+This project uses the provided census.csv dataset
+
+The dataset was cleaned and processed before the model was trained. The categorical columns were encoded using OneHotEnco
+der and the labels were transformed using LabelBinarizer.
+
+----------
 
 # Model
-* Using the starter code, write a machine learning model that trains on the clean data and saves the model. Complete any function that has been started.
-* Write unit tests for at least 3 functions in the model code.
-* Write a function that outputs the performance of the model on slices of the data.
-    * Suggestion: for simplicity, the function can just output the performance on slices of just the categorical features.
-* Write a model card using the provided template.
+
+Using the starter code, I created a ML model using a Random Forest Classifier from scikit-learn. The model trains on the census dataset, saves the trained model, saves the encodel and the label binarizer, then performs inference using FastAPI. 
+
+Functionality is implemented in ml/model.py. The model training, model saving/loading, inference, the metric calculations, and performance evaluation on categorical slices.
+
+Three unit tests were written and passed successfully
+
+A function was created and written to slice_output.txt to show the model metrics for categorical features. This shows: 
+- Precision: 0.7419
+- Recall: 0.6384
+- F1 Score: 0.6863
+
+A model card is stored in model_card_template.md.
+
+------------
 
 # API Creation
-*  Create a RESTful API using FastAPI this must implement:
+
+A RESTful API was created using FastAPI.
+
+This API implements:
     * GET on the root giving a welcome message.
     * POST that does model inference.
+
+The API was tested locally using local_api.py
+
+To run the API locally, run:
+uvicorn main:app --reload
+
+API documentation is available at - http://127.0.0.1:8000/docs
+
+SCREENSHOTS:
+
+Screenshots are located inside the GitHub repo
